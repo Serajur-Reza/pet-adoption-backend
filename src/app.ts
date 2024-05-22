@@ -2,7 +2,7 @@ import express, { Application, NextFunction, Request, Response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { PrismaClient } from "@prisma/client";
-import globalErrorHandler from "./middleware/globalErrorHandler";
+import globalErrorHandler from "./middlewares/globalErrorHandler";
 
 const app: Application = express();
 

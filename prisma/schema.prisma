@@ -14,16 +14,15 @@ datasource db {
 }
 
 model User {
-  id           String     @id @default(uuid())
+  id           String   @id @default(uuid())
   name         String
   username     String
-  email        String     @unique
+  email        String   @unique
   password     String
   profilePhoto String
-  isActivated  Boolean    @default(false)
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  adoption     Adoption[]
+  isActivated  Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   role         UserRole
   admin        Admin?
   adoptor      Adoptor?
@@ -41,7 +40,8 @@ model Adoptor {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  user User @relation(fields: [email], references: [email])
+  adoption Adoption[]
+  user     User       @relation(fields: [email], references: [email])
 
   @@map("adoptors")
 }
@@ -71,6 +71,7 @@ model Pet {
   age           Int
   health_status String
   location      String
+  isDeleted     Boolean
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
   adoption      Adoption[]
@@ -86,8 +87,8 @@ model Adoption {
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
 
-  user User @relation(fields: [userId], references: [id])
-  pet  Pet  @relation(fields: [petId], references: [id])
+  adoptor Adoptor @relation(fields: [userId], references: [id])
+  pet     Pet     @relation(fields: [petId], references: [id])
 
   @@map("adoptions")
 }
@@ -100,11 +101,11 @@ enum AdoptionStatus {
 
 enum UserRole {
   SUPER_ADMIN
-  Admin
-  User
+  ADMIN
+  ADOPTOR
 }
 
 enum Gender {
-  Male
-  Female
+  MALE
+  FEMALE
 }

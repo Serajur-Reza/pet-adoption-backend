@@ -105,24 +105,6 @@ const createAdminService = async (body: any) => {
   };
 };
 
-const createAdoptorService = async (body: any) => {
-  const hashedPassword = await bcrypt.hash(
-    body.password,
-    Number(config.hashedRound)
-  );
-  body.password = hashedPassword;
-  const res = await prisma.user.create({
-    data: body,
-  });
-  return {
-    id: res.id,
-    name: res.name,
-    email: res.email,
-    createdAt: res.createdAt,
-    updatedAt: res.updatedAt,
-  };
-};
-
 export const authServices = {
   loginService,
   changePasswordService,
