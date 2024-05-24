@@ -14,22 +14,24 @@ const loginController = catchAsync(
 );
 
 const changePasswordController = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const result = await authServices.loginService(req.body);
+  async (req: Request & { user?: any }, res: Response, next: NextFunction) => {
+    const user = req.user;
+    const result = await authServices.changePasswordService(user, req.body);
     res.status(200).json({
       success: true,
-      message: "User logged in successfully",
+      message: "Password changed successfully",
       data: result,
     });
   }
 );
 
-const getMyProfile = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const result = await authServices.loginService(req.body);
+const getMyProfileController = catchAsync(
+  async (req: Request & { user?: any }, res: Response, next: NextFunction) => {
+    const user = req.user;
+    const result = await authServices.getMyProfileService(user);
     res.status(200).json({
       success: true,
-      message: "User logged in successfully",
+      message: "My Profile retrieved successfully",
       data: result,
     });
   }
@@ -40,7 +42,7 @@ const createAdminController = catchAsync(
     const result = await authServices.createAdminService(req.body);
     res.status(200).json({
       success: true,
-      message: "User logged in successfully",
+      message: "Admin created successfully",
       data: result,
     });
   }
@@ -49,6 +51,6 @@ const createAdminController = catchAsync(
 export const authControllers = {
   loginController,
   changePasswordController,
-  createAdoptorController,
+  getMyProfileController,
   createAdminController,
 };

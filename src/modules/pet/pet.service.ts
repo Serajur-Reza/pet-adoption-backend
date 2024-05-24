@@ -3,11 +3,17 @@ import { prisma } from "../../app";
 import { TPaginationOptions } from "../../types/pagination";
 import { petSearchableFields } from "./pet.constants";
 import { calculatePagination } from "../../utils/pagination";
+import { TFile } from "../../types/file";
+import { fileUploader } from "../../utils/fileUploader";
 
 const getAllPetsService = async (params: any, options: TPaginationOptions) => {
   const { searchTerm, ...filterData } = params;
   const { limit, page, skip } = calculatePagination(options);
-  const conditions: Prisma.PetWhereInput[] = [];
+  const conditions: Prisma.PetWhereInput[] = [
+    {
+      isDeleted: false,
+    },
+  ];
 
   if (params.searchTerm) {
     conditions.push({
@@ -59,7 +65,21 @@ const getAllPetsService = async (params: any, options: TPaginationOptions) => {
   };
 };
 
-const createPetService = async (payload: Pet) => {
+const createPetService = async (req: any) => {
+  console.log(req.file);
+  console.log(req.body.data);
+
+  const payload = JSON.parse(req.body.data);
+  const file: TFile = req.file;
+  // console.log(req.body);
+  if (file) {
+    const uploadToCloudinary = await fileUploader.uploadToCloudinary(file);
+    console.log("from service:", uploadToCloudinary);
+    payload.photo = uploadToCloudinary?.secure_url as string;
+  }
+  console.log("start");
+  console.log(payload);
+  console.log("end");
   const result = await prisma.pet.create({
     data: payload,
   });
@@ -75,8 +95,22 @@ const updatePetService = async (id: string, payload: Partial<Pet>) => {
   });
   return result;
 };
+
+const deletePetService = async (id: string) => {
+  const result = await prisma.pet.update({
+    where: {
+      id,
+    },
+    data: {
+      isDeleted: true,
+    },
+  });
+  return result;
+};
 export const PetServices = {
   getAllPetsService,
   createPetService,
   updatePetService,
+
+  deletePetService,
 };

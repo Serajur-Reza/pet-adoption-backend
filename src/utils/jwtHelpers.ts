@@ -1,4 +1,4 @@
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 import config from "../config";
 
 export const generateToken = (body: {
@@ -13,6 +13,6 @@ export const generateToken = (body: {
   return res;
 };
 
-export const verifyToken = (token: string) => {
-  return jwt.verify(token, config.jwt_access_secret as string) as JwtPayload;
+export const verifyToken = (token: string, secret: Secret) => {
+  return jwt.verify(token, secret) as JwtPayload;
 };

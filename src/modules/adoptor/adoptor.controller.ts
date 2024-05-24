@@ -9,18 +9,18 @@ const getAllAdoptorController = catchAsync(
     res.json({
       success: true,
       statusCode: 200,
-      message: "Adoptor profile retrieved successfully",
+      message: "Adoptors retrieved successfully",
       data: result,
     });
   }
 );
 
 const getAdoptorController = catchAsync(async (req: Request, res: Response) => {
-  const result = await adoptorServices.getAdoptorService(req);
+  const result = await adoptorServices.getAdoptorService(req.body);
   res.json({
     success: true,
     statusCode: 200,
-    message: "Adoptor profile retrieved successfully",
+    message: "Adoptor retrieved successfully",
     data: result,
   });
 });
@@ -39,7 +39,10 @@ const createAdoptorController = catchAsync(
 
 const updateAdoptorController = catchAsync(
   async (req: Request, res: Response) => {
-    const result = await adoptorServices.updateAdoptorService(req);
+    const result = await adoptorServices.updateAdoptorService(
+      req.params.id,
+      req.body
+    );
     res.status(httpStatus.OK).json({
       success: true,
       statusCode: 200,

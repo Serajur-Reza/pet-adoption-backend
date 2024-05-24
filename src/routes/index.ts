@@ -1,8 +1,8 @@
-// import { AdoptionRoutes } from "../modules/adoption/adoption.routes";
-// import { PetRoutes } from "../modules/pet/pet.routes";
-// import { UserRoutes } from "../modules/user/user.routes";
 import express from "express";
 import { authRoutes } from "../modules/auth/auth.routes";
+import { petRoutes } from "../modules/pet/pet.routes";
+import { adoptorRoutes } from "../modules/adoptor/adoptor.routes";
+import { adoptionRoutes } from "../modules/adoption/adoption.routes";
 
 const router = express.Router();
 
@@ -11,14 +11,18 @@ const moduleRoutes = [
     path: "/",
     route: authRoutes,
   },
-  //   {
-  //     path: "/pets",
-  //     route: PetRoutes,
-  //   },
-  //   {
-  //     path: "/adoption-requests",
-  //     route: AdoptionRoutes,
-  //   },
+  {
+    path: "/pets",
+    route: petRoutes,
+  },
+  {
+    path: "/adoptor",
+    route: adoptorRoutes,
+  },
+  {
+    path: "/adoption",
+    route: adoptionRoutes,
+  },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

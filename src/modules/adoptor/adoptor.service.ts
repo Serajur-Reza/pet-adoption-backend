@@ -1,8 +1,10 @@
-import { UserRole } from "@prisma/client";
+import { Adoptor, UserRole } from "@prisma/client";
 import { prisma } from "../../app";
 import config from "../../config";
 
 import * as bcrypt from "bcrypt";
+import { fileUploader } from "../../utils/fileUploader";
+import { TFile } from "../../types/file";
 
 const getAllAdoptorService = async () => {
   const res = await prisma.adoptor.findMany({
@@ -44,34 +46,61 @@ const createAdoptorService = async (body: any) => {
     Number(config.hashedRound)
   );
   body.password = hashedPassword;
-  const res = await prisma.adoptor.create({
-    data: body,
+  body.role = UserRole.ADOPTOR;
+
+  const result = await prisma.$transaction(async (transactionClient) => {
+    console.log(body);
+    const createdUserData = await transactionClient.user.create({
+      data: body,
+    });
+
+    // console.log(createdUserData);
+    const createAdoptorData = await transactionClient.adoptor.create({
+      data: {
+        name: body.name,
+        username: body.username,
+        email: body.email,
+        contactNumber: body.contactNumber,
+        isActivated: body.isActivated,
+      },
+    });
+
+    return createAdoptorData;
   });
-  return {
-    id: res.id,
-    name: res.name,
-    email: res.email,
-    createdAt: res.createdAt,
-    updatedAt: res.updatedAt,
-  };
+  return result;
 };
 
-const updateAdoptorService = async (req: Request & { user: any }) => {
-  const user = req?.user;
-
-  const res = await prisma.adoptor.update({
+const updateAdoptorService = async (id: string, body: Partial<Adoptor>) => {
+  const adoptor = await prisma.adoptor.findUniqueOrThrow({
     where: {
-      id: user?.id,
+      id,
     },
-    data: req.body,
   });
-  return {
-    id: res.id,
-    name: res.name,
-    email: res.email,
-    createdAt: res.createdAt,
-    updatedAt: res.updatedAt,
-  };
+
+  let result;
+
+  if (adoptor) {
+    result = await prisma.$transaction(async (transactionClient) => {
+      console.log(body);
+      await transactionClient.user.update({
+        where: {
+          email: adoptor?.email,
+        },
+        data: body,
+      });
+
+      // console.log(createdUserData);
+      const updateAdoptorData = await transactionClient.adoptor.update({
+        where: {
+          id,
+        },
+        data: body,
+      });
+
+      return updateAdoptorData;
+    });
+  }
+  return result;
 };
 
 export const adoptorServices = {

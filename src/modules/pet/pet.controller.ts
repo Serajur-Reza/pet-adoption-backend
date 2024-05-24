@@ -18,7 +18,7 @@ const getAllPetsController = catchAsync(async (req: Request, res: Response) => {
 });
 
 const createPetController = catchAsync(async (req: Request, res: Response) => {
-  const result = await PetServices.createPetService(req.body);
+  const result = await PetServices.createPetService(req);
   res.json({
     success: true,
     statusCode: 201,
@@ -37,8 +37,19 @@ const updatePetController = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const deletePetController = catchAsync(async (req: Request, res: Response) => {
+  const result = await PetServices.deletePetService(req.params.petId);
+  res.json({
+    success: true,
+    statusCode: 200,
+    message: "Pet profile deleted successfully",
+    data: result,
+  });
+});
+
 export const PetControllers = {
   getAllPetsController,
   createPetController,
   updatePetController,
+  deletePetController,
 };
