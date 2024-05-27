@@ -14,56 +14,25 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(uuid())
+  id            String     @id @default(uuid())
   name          String
-  username      String   @unique
-  email         String   @unique
+  username      String     @unique
+  email         String     @unique
   password      String
   contactNumber String?
-  isActivated   Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  isActivated   Boolean    @default(false)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
   role          UserRole
-  admin         Admin?
-  adoptor       Adoptor?
+  adoption      Adoption[]
 
   @@map("users")
-}
-
-model Adoptor {
-  id            String   @id @default(uuid())
-  name          String
-  username      String   @unique
-  email         String   @unique
-  contactNumber String?
-  isActivated   Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  user          User     @relation(fields: [email], references: [email])
-
-  adoption Adoption[]
-
-  @@map("adoptors")
-}
-
-model Admin {
-  id            String   @id @default(uuid())
-  name          String
-  username      String   @unique
-  email         String   @unique
-  contactNumber String?
-  isActivated   Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  user          User     @relation(fields: [email], references: [email])
-
-  @@map("admins")
 }
 
 model Pet {
   id            String     @id @default(uuid())
   name          String
-  photo         String
+  photos        String[]
   description   String
   gender        Gender
   breed         String
@@ -86,8 +55,8 @@ model Adoption {
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
 
-  adoptor Adoptor @relation(fields: [userId], references: [id])
-  pet     Pet     @relation(fields: [petId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+  pet  Pet  @relation(fields: [petId], references: [id])
 
   @@map("adoptions")
 }

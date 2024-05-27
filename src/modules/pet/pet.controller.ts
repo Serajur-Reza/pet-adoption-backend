@@ -17,6 +17,18 @@ const getAllPetsController = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getSinglePetController = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await PetServices.getSinglePetService(req.params.petId);
+    res.json({
+      success: true,
+      statusCode: 200,
+      message: "Pet retrieved successfully",
+      data: result,
+    });
+  }
+);
+
 const createPetController = catchAsync(async (req: Request, res: Response) => {
   const result = await PetServices.createPetService(req);
   res.json({
@@ -49,6 +61,7 @@ const deletePetController = catchAsync(async (req: Request, res: Response) => {
 
 export const PetControllers = {
   getAllPetsController,
+  getSinglePetController,
   createPetController,
   updatePetController,
   deletePetController,

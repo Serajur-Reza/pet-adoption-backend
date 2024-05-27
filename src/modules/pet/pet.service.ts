@@ -65,18 +65,35 @@ const getAllPetsService = async (params: any, options: TPaginationOptions) => {
   };
 };
 
+const getSinglePetService = async (id: string) => {
+  const result = await prisma.pet.findUniqueOrThrow({
+    where: {
+      id,
+    },
+  });
+
+  return result;
+};
+
 const createPetService = async (req: any) => {
-  console.log(req.file);
+  console.log(req.files);
   console.log(req.body.data);
 
   const payload = JSON.parse(req.body.data);
-  const file: TFile = req.file;
+  const files: TFile[] = req.files;
+  let fileArray = [];
   // console.log(req.body);
-  if (file) {
-    const uploadToCloudinary = await fileUploader.uploadToCloudinary(file);
-    console.log("from service:", uploadToCloudinary);
-    payload.photo = uploadToCloudinary?.secure_url as string;
+  if (files.length) {
+    for (let i = 0; i < files.length; i++) {
+      const uploadToCloudinary = await fileUploader.uploadToCloudinary(
+        files[i]
+      );
+      console.log("from service:", uploadToCloudinary);
+      // payload.photo = uploadToCloudinary?.secure_url as string;
+      fileArray.push(uploadToCloudinary?.secure_url as string);
+    }
   }
+  payload.photos = fileArray;
   console.log("start");
   console.log(payload);
   console.log("end");
@@ -109,8 +126,8 @@ const deletePetService = async (id: string) => {
 };
 export const PetServices = {
   getAllPetsService,
+  getSinglePetService,
   createPetService,
   updatePetService,
-
   deletePetService,
 };

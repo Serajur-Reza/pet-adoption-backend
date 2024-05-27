@@ -11,10 +11,16 @@ router.get(
   auth(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.ADOPTOR),
   PetControllers.getAllPetsController
 );
+
+router.get(
+  "/:petId",
+  auth(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.ADOPTOR),
+  PetControllers.getSinglePetController
+);
 router.post(
   "/",
   auth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
-  fileUploader.upload.single("file"),
+  fileUploader.upload.array("files", 4),
   PetControllers.createPetController
 );
 router.put(
@@ -23,7 +29,7 @@ router.put(
   PetControllers.updatePetController
 );
 
-router.delete(
+router.patch(
   "/:petId",
   auth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
   PetControllers.deletePetController

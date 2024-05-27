@@ -29,7 +29,7 @@ const createAdoptionService = async (
     throw new Error("Pet not found");
   }
 
-  const adoptor = await prisma.adoptor.findUniqueOrThrow({
+  const adoptor = await prisma.user.findUniqueOrThrow({
     where: {
       email: req?.user?.email,
     },

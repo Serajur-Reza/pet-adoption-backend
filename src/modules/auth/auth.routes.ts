@@ -12,11 +12,5 @@ router.post(
   auth(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.ADOPTOR),
   authControllers.changePasswordController
 );
-router.post("/create-admin", authControllers.createAdminController);
-router.get(
-  "/my",
-  auth(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.ADOPTOR),
-  authControllers.getMyProfileController
-);
 
 export const authRoutes = router;
