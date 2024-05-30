@@ -1,8 +1,23 @@
 import { prisma } from "../../app";
 import { Request } from "express";
 
-const getAllAdoptionsService = async (req: Request & { user: any }) => {
-  const adoptor = await prisma.adoptor.findUniqueOrThrow({
+const getAllAdoptionsService = async () => {
+  const result = await prisma.adoption.findMany({
+    select: {
+      id: true,
+      userId: true,
+      petId: true,
+      status: true,
+      createdAt: true,
+      updatedAt: true,
+      pet: true,
+    },
+  });
+  return result;
+};
+
+const getMyAdoptionsService = async (req: Request & { user: any }) => {
+  const adoptor = await prisma.user.findUniqueOrThrow({
     where: {
       email: req?.user?.email,
     },
@@ -10,6 +25,15 @@ const getAllAdoptionsService = async (req: Request & { user: any }) => {
   const result = await prisma.adoption.findMany({
     where: {
       userId: adoptor?.id,
+    },
+    select: {
+      id: true,
+      userId: true,
+      petId: true,
+      status: true,
+      createdAt: true,
+      updatedAt: true,
+      pet: true,
     },
   });
   return result;
@@ -31,15 +55,32 @@ const createAdoptionService = async (
 
   const adoptor = await prisma.user.findUniqueOrThrow({
     where: {
-      email: req?.user?.email,
+      id: req?.user?.id,
     },
   });
 
   console.log(adoptor);
 
   console.log({ ...payload, userId: adoptor?.id });
-  const result = await prisma.adoption.create({
-    data: { ...payload, userId: adoptor?.id },
+  // const result = await prisma.adoption.create({
+  //   data: { ...payload, userId: adoptor?.id },
+  // });
+
+  const result = await prisma.$transaction(async (tc) => {
+    const createdAdoption = await tc.adoption.create({
+      data: { ...payload, userId: adoptor?.id },
+    });
+
+    await tc.pet.update({
+      where: {
+        id: payload.petId,
+      },
+
+      data: {
+        isAdopted: true,
+      },
+    });
+    return createdAdoption;
   });
   return result;
 };
@@ -58,6 +99,7 @@ const updateAdoptionService = async (
 };
 export const adoptionServices = {
   getAllAdoptionsService,
+  getMyAdoptionsService,
   createAdoptionService,
   updateAdoptionService,
 };

@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get(
   "/all-users",
-  auth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  // auth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
   userControllers.getAllUsersController
 );
 

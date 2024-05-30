@@ -17,7 +17,7 @@ const getAllUsersController = catchAsync(
 
 const getMyProfileController = catchAsync(
   async (req: Request, res: Response) => {
-    const result = await userServices.getMyProfileService(req.body);
+    const result = await userServices.getMyProfileService(req?.user);
     res.json({
       success: true,
       statusCode: 200,

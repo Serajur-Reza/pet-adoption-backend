@@ -6,10 +6,17 @@ import { UserRole } from "@prisma/client";
 import auth from "../../middlewares/auth";
 
 const router = express.Router();
+
 router.get(
   "/",
   auth(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.ADOPTOR),
   adoptionControllers.getAllAdoptionsController
+);
+
+router.get(
+  "/my-adoptions",
+  auth(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.ADOPTOR),
+  adoptionControllers.getMyAdoptionsController
 );
 router.post(
   "/",

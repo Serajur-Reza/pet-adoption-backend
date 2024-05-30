@@ -4,7 +4,7 @@ import { adoptionServices } from "./adoption.service";
 
 const getAllAdoptionsController = catchAsync(
   async (req: Request, res: Response) => {
-    const result = await adoptionServices.getAllAdoptionsService(req);
+    const result = await adoptionServices.getAllAdoptionsService();
     res.json({
       success: true,
       statusCode: 200,
@@ -14,17 +14,17 @@ const getAllAdoptionsController = catchAsync(
   }
 );
 
-// const getAdoptController = catchAsync(
-//   async (req: Request, res: Response) => {
-//     const result = await adoptionServices.getAdoptorService(req);
-//     res.json({
-//       success: true,
-//       statusCode: 200,
-//       message: "Adoption requests retrieved successfully",
-//       data: result,
-//     });
-//   }
-// );
+const getMyAdoptionsController = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await adoptionServices.getMyAdoptionsService(req);
+    res.json({
+      success: true,
+      statusCode: 200,
+      message: "Adoption requests retrieved successfully",
+      data: result,
+    });
+  }
+);
 
 const createAdoptionController = catchAsync(
   async (req: Request, res: Response) => {
@@ -55,6 +55,7 @@ const updateAdoptionController = catchAsync(
 
 export const adoptionControllers = {
   getAllAdoptionsController,
+  getMyAdoptionsController,
   createAdoptionController,
   updateAdoptionController,
 };

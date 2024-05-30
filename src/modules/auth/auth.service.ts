@@ -62,7 +62,7 @@ const changePasswordService = async (
     },
   });
 
-  console.log(userData);
+  // console.log(userData);
 
   const isCorrectPassword = await bcrypt.compare(
     payload.oldPassword,
@@ -75,10 +75,10 @@ const changePasswordService = async (
 
   const hashedPassword = await bcrypt.hash(
     payload.newPassword,
-    config.hashedRound as string
+    Number(config.hashedRound)
   );
 
-  await prisma.user.update({
+  const res = await prisma.user.update({
     where: {
       email: user.email,
     },
@@ -86,6 +86,8 @@ const changePasswordService = async (
       password: hashedPassword,
     },
   });
+
+  console.log(res);
 
   return {
     message: "password changed successfully",

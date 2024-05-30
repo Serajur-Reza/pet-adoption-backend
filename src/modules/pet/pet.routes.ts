@@ -17,10 +17,16 @@ router.get(
   auth(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.ADOPTOR),
   PetControllers.getSinglePetController
 );
+// router.post(
+//   "/",
+//   auth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+//   fileUploader.upload.array("files", 4),
+//   PetControllers.createPetController
+// );
+
 router.post(
   "/",
   auth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
-  fileUploader.upload.array("files", 4),
   PetControllers.createPetController
 );
 router.put(

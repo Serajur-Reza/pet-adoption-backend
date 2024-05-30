@@ -1,45 +1,56 @@
-import { Adoptor, User, UserRole } from "@prisma/client";
+import { User } from "@prisma/client";
 import { prisma } from "../../app";
 import config from "../../config";
-
 import * as bcrypt from "bcrypt";
-import { fileUploader } from "../../utils/fileUploader";
-import { TFile } from "../../types/file";
-import { JwtPayload } from "jsonwebtoken";
 
 const getAllUsersService = async () => {
   const res = await prisma.user.findMany({
-    where: {
-      isActivated: true,
-    },
     select: {
       id: true,
+      username: true,
       name: true,
       email: true,
+      isActivated: true,
+      role: true,
+      contactNumber: true,
       createdAt: true,
       updatedAt: true,
+      adoption: {
+        select: {
+          id: true,
+        },
+      },
     },
   });
   return res;
 };
 
-const getMyProfileService = async (user: JwtPayload) => {
+const getMyProfileService = async (user: any) => {
   const userData = await prisma.user.findUniqueOrThrow({
     where: {
-      email: user.email,
+      id: user?.id,
+    },
+
+    select: {
+      id: true,
+      username: true,
+      name: true,
+      email: true,
       isActivated: true,
+      role: true,
+      contactNumber: true,
+      createdAt: true,
+      updatedAt: true,
+      adoption: {
+        select: {
+          id: true,
+          petId: true,
+        },
+      },
     },
   });
 
-  return {
-    id: userData.id,
-    username: userData.username,
-    role: userData.role,
-    name: userData.name,
-    email: userData.email,
-    contactNumber: userData.contactNumber,
-    isActivated: userData.isActivated,
-  };
+  return userData;
 };
 
 const createUserService = async (body: any) => {

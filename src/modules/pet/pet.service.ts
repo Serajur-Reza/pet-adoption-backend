@@ -76,29 +76,34 @@ const getSinglePetService = async (id: string) => {
 };
 
 const createPetService = async (req: any) => {
-  console.log(req.files);
-  console.log(req.body.data);
+  // console.log(req.files);
+  // console.log(req.body.data);
 
-  const payload = JSON.parse(req.body.data);
-  const files: TFile[] = req.files;
-  let fileArray = [];
-  // console.log(req.body);
-  if (files.length) {
-    for (let i = 0; i < files.length; i++) {
-      const uploadToCloudinary = await fileUploader.uploadToCloudinary(
-        files[i]
-      );
-      console.log("from service:", uploadToCloudinary);
-      // payload.photo = uploadToCloudinary?.secure_url as string;
-      fileArray.push(uploadToCloudinary?.secure_url as string);
-    }
-  }
-  payload.photos = fileArray;
-  console.log("start");
-  console.log(payload);
-  console.log("end");
+  // const payload = JSON.parse(req.body.data);
+  // const files: TFile[] = req.files;
+  // let fileArray = [];
+  // // console.log(req.body);
+  // if (files.length) {
+  //   for (let i = 0; i < files.length; i++) {
+  //     const uploadToCloudinary = await fileUploader.uploadToCloudinary(
+  //       files[i]
+  //     );
+  //     console.log("from service:", uploadToCloudinary);
+  //     // payload.photo = uploadToCloudinary?.secure_url as string;
+  //     fileArray.push(uploadToCloudinary?.secure_url as string);
+  //   }
+  // }
+  // payload.photos = fileArray;
+  // console.log("start");
+  // console.log(payload);
+  // console.log("end");
+
+  // const result = await prisma.pet.create({
+  //   data: payload,
+  // });
+
   const result = await prisma.pet.create({
-    data: payload,
+    data: req.body,
   });
   return result;
 };
