@@ -8,7 +8,6 @@ import * as bcrypt from "bcrypt";
 import { JwtPayload } from "jsonwebtoken";
 
 const loginService = async (body: any) => {
-  console.log(body);
   const user1 = await prisma.user.findUnique({
     where: {
       email: body.user,
@@ -54,15 +53,12 @@ const changePasswordService = async (
   user: JwtPayload,
   payload: { oldPassword: string; newPassword: string }
 ) => {
-  console.log(user);
   const userData = await prisma.user.findUniqueOrThrow({
     where: {
       email: user.email,
       isActivated: true,
     },
   });
-
-  // console.log(userData);
 
   const isCorrectPassword = await bcrypt.compare(
     payload.oldPassword,
@@ -86,8 +82,6 @@ const changePasswordService = async (
       password: hashedPassword,
     },
   });
-
-  console.log(res);
 
   return {
     message: "password changed successfully",

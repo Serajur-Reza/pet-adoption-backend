@@ -58,10 +58,6 @@ const createAdoptionService = async (
       id: req?.user?.id,
     },
   });
-
-  console.log(adoptor);
-
-  console.log({ ...payload, userId: adoptor?.id });
   // const result = await prisma.adoption.create({
   //   data: { ...payload, userId: adoptor?.id },
   // });

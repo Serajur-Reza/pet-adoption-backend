@@ -28,7 +28,6 @@ const getMyProfileController = catchAsync(
 );
 
 const createUserController = catchAsync(async (req: Request, res: Response) => {
-  console.log(req.body);
   const result = await userServices.createUserService(req.body);
   res.json({
     success: true,
@@ -39,7 +38,6 @@ const createUserController = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateUserController = catchAsync(async (req: Request, res: Response) => {
-  console.log(req.body);
   const result = await userServices.updateUserService(req.params.id, req.body);
   res.status(httpStatus.OK).json({
     success: true,

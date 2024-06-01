@@ -9,41 +9,97 @@ import { fileUploader } from "../../utils/fileUploader";
 const getAllPetsService = async (params: any, options: TPaginationOptions) => {
   const { searchTerm, ...filterData } = params;
   const { limit, page, skip } = calculatePagination(options);
-  const conditions: Prisma.PetWhereInput[] = [
-    {
-      isDeleted: false,
-    },
-  ];
 
-  if (params.searchTerm) {
-    conditions.push({
-      OR: petSearchableFields.map((field) => ({
-        [field]: {
-          contains: params.searchTerm,
-          mode: "insensitive",
-        },
-      })),
+  const andConditions: Prisma.PetWhereInput[] = [];
+
+  if (searchTerm) {
+    andConditions.push({
+      OR: petSearchableFields.map((field) => {
+        if (field === "age") {
+          return {
+            [field]: {
+              equals: isNaN(Number(searchTerm)) ? 0 : Number(searchTerm),
+            },
+          };
+        } else {
+          return {
+            [field]: {
+              contains: searchTerm,
+              mode: "insensitive",
+            },
+          };
+        }
+      }),
     });
   }
-
   if (Object.keys(filterData).length > 0) {
-    conditions.push({
-      AND: Object.keys(filterData).map((key) => ({
-        [key]: {
-          equals: (filterData as any)[key],
-        },
-      })),
+    const filterConditions = Object.keys(filterData).map((key) => {
+      if (key === "special_needs") {
+        return {
+          [key]: {
+            contains: (filterData as any)[key],
+            mode: "insensitive",
+          },
+        };
+      } else {
+        return {
+          [key]: {
+            equals: (filterData as any)[key],
+          },
+        };
+      }
     });
+    andConditions.push(...filterConditions);
   }
 
-  const andCondition: Prisma.PetWhereInput = conditions.length
-    ? {
-        AND: conditions,
-      }
-    : {};
+  andConditions.push({
+    isDeleted: {
+      equals: false,
+    },
+  });
+
+  const whereConditions: Prisma.PetWhereInput =
+    andConditions.length > 0 ? { AND: andConditions } : {};
+
+  const whereConditions2: Prisma.PetWhereInput = {
+    AND: {
+      OR: [
+        {
+          breed: {
+            contains: "afvariopahf334",
+            mode: "insensitive",
+          },
+        },
+        {
+          name: {
+            contains: "afvariopahf334",
+            mode: "insensitive",
+          },
+        },
+        {
+          location: {
+            contains: "afvariopahf334",
+            mode: "insensitive",
+          },
+        },
+        {
+          isDeleted: {
+            equals: false,
+          },
+        },
+      ],
+      // isDeleted: {
+      //   equals: false,
+      // },
+    },
+  };
+
+  console.dir(whereConditions, Infinity);
+
+  // console.dir(whereConditions2?.AND?.OR, Infinity);
 
   const result = await prisma.pet.findMany({
-    where: andCondition,
+    where: whereConditions,
     skip,
     take: limit,
     orderBy:
@@ -54,7 +110,8 @@ const getAllPetsService = async (params: any, options: TPaginationOptions) => {
         : { createdAt: "desc" },
   });
 
-  const count = await prisma.pet.count({ where: andCondition });
+  const count = await prisma.pet.count({ where: whereConditions });
+
   return {
     meta: {
       page,
