@@ -21,7 +21,7 @@ How to run this locally,
 #### Login User
 
 ```http
-  POST https://assignment-8-gray-xi.vercel.app/api/login
+  POST  https://pet-adoption-backend-three.vercel.app/api/login
 ```
 
 | Body | Type     | Description                |
@@ -33,7 +33,7 @@ How to run this locally,
 #### Change Password
 
 ```http
-  POST https://assignment-8-gray-xi.vercel.app/api/login
+  POST  https://pet-adoption-backend-three.vercel.app/api/login
 ```
 
 | Body | Type     | Description                |
@@ -48,7 +48,7 @@ How to run this locally,
 #### Register User
 
 ```http
-  POST https://assignment-8-gray-xi.vercel.app/api/user
+  POST  https://pet-adoption-backend-three.vercel.app/api/user
 ```
 
 | Body | Type     | Description                |
@@ -66,7 +66,7 @@ How to run this locally,
 #### Get User Profile
 
 ```http
-  GET https://assignment-8-gray-xi.vercel.app/api/user/my
+  GET  https://pet-adoption-backend-three.vercel.app/api/user/my
 ```
 
 | Header | Type     | Description                       |
@@ -78,7 +78,7 @@ How to run this locally,
 #### Update User Profile
 
 ```http
-  PATCH https://assignment-8-gray-xi.vercel.app/api/user/:id
+  PATCH  https://pet-adoption-backend-three.vercel.app/api/user/:id
 ```
 
 
@@ -94,7 +94,7 @@ How to run this locally,
 #### Get Paginated and Filtered Pets
 
 ```http
-  GET https://assignment-8-gray-xi.vercel.app/api/pets
+  GET  https://pet-adoption-backend-three.vercel.app/api/pets
 ```
 
 | Parameter | Type     | Description                |
@@ -114,7 +114,7 @@ How to run this locally,
 #### Create Pet
 
 ```http
-  POST https://assignment-8-gray-xi.vercel.app/api/pets
+  POST  https://pet-adoption-backend-three.vercel.app/api/pets
 ```
 
 | Header | Type     | Description                       |
@@ -139,7 +139,7 @@ How to run this locally,
 #### Update Pet
 
 ```http
-  PUT https://assignment-8-gray-xi.vercel.app/api/pets/:petId
+  PUT  https://pet-adoption-backend-three.vercel.app/api/pets/:petId
 ```
 
 | Header | Type     | Description                       |
@@ -166,7 +166,7 @@ How to run this locally,
 #### Get Adoption Request
 
 ```http
-  GET https://assignment-8-gray-xi.vercel.app/api/adoption/
+  GET  https://pet-adoption-backend-three.vercel.app/api/adoption/
 ```
 
 | Header | Type     | Description                       |
@@ -177,7 +177,7 @@ How to run this locally,
 #### Get My Adoption Request
 
 ```http
-  GET https://assignment-8-gray-xi.vercel.app/api/adoption/my-adoptions
+  GET  https://pet-adoption-backend-three.vercel.app/api/adoption/my-adoptions
 ```
 
 | Header | Type     | Description                       |
@@ -206,7 +206,7 @@ How to run this locally,
 #### Update Adoption Request Status
 
 ```http
-  PUT https://assignment-8-gray-xi.vercel.app/api/adoption/:requestId
+  PUT  https://pet-adoption-backend-three.vercel.app/api/adoption/:requestId
 ```
 
 | Header | Type     | Description                       |
