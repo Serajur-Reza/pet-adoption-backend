@@ -9,7 +9,10 @@ const app: Application = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:3001"],
+    origin: [
+      "http://localhost:3001",
+      "https://pet-adoption-frontend.vercel.app",
+    ],
     credentials: true,
   })
 );

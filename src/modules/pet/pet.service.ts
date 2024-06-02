@@ -102,12 +102,6 @@ const getAllPetsService = async (params: any, options: TPaginationOptions) => {
     where: whereConditions,
     skip,
     take: limit,
-    orderBy:
-      options.sortBy && options.sortOrder
-        ? {
-            [options.sortBy]: options.sortOrder,
-          }
-        : { createdAt: "desc" },
   });
 
   const count = await prisma.pet.count({ where: whereConditions });
